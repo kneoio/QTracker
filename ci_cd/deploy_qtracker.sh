@@ -6,83 +6,77 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# Check for the -d flag (daemon mode)
-DAEMON_MODE=false
-while getopts "d" option; do
-  case $option in
-    d) DAEMON_MODE=true ;;
-    *) echo "Usage: $0 [-d] (run as a service)"; exit 1 ;;
-  esac
-done
+# Variables
+REPO_URL="https://github.com/kneoio/QTracker.git"  # Public GitHub repo URL
+REPO_DIR="QTracker"
+ENV_FILE="$REPO_DIR/.env"
+PYTHON_VERSION="python3.11"
 
-# Debugging output to verify if daemon mode is recognized
-echo "Daemon mode: $DAEMON_MODE"
+# Function to check and install missing dependencies
+install_dependencies() {
+  echo "Installing core utilities and Python..."
+  apt update && apt install -y $PYTHON_VERSION $PYTHON_VERSION-venv git || {
+    echo "Failed to install dependencies."
+    exit 1
+  }
+}
 
-# Update and install core utilities
-echo "Updating package list and installing core utilities..."
-apt update && apt install -y python3 python3-venv git
+# Clone or pull the latest code from the repository
+deploy_repository() {
+  # Check if the repository directory exists
+  if [ -d "$REPO_DIR/.git" ]; then
+    echo "QTracker repository found. Pulling latest changes..."
+    cd "$REPO_DIR" || exit
+    git pull origin master || {
+      echo "Failed to pull latest changes."
+      exit 1
+    }
+  else
+    echo "Cloning QTracker repository..."
+    git clone $REPO_URL || {
+      echo "Failed to clone the repository."
+      exit 1
+    }
+    cd "$REPO_DIR" || exit
+  fi
+}
 
-# Stop Telegram Bot service if running
-echo "Stopping Telegram Bot service if it exists..."
-systemctl stop telegrambot || true
+# Create virtual environment and install dependencies
+setup_python_env() {
+  echo "Setting up Python virtual environment..."
+  if [ ! -d "venv" ]; then
+    $PYTHON_VERSION -m venv venv || {
+      echo "Failed to create virtual environment."
+      exit 1
+    }
+  fi
 
-# Clone/update the Telegram bot project
-REPO_DIR="/home/telegrambot"
-if [ -d "$REPO_DIR" ]; then
-  echo "Updating Telegram bot project from GitHub..."
-  git -C $REPO_DIR pull origin master
-else
-  echo "Cloning Telegram bot project from GitHub..."
-  git clone https://github.com/your-repo/telegram-bot.git $REPO_DIR
-fi
+  echo "Activating virtual environment and installing dependencies..."
+  source venv/bin/activate
+  pip install --upgrade pip
+  pip install -r requirements.txt || {
+    echo "Failed to install Python dependencies."
+    exit 1
+  }
+  deactivate
+}
 
-# Navigate to the bot's directory
-cd $REPO_DIR
+# Verify .env file exists (no creation, just check)
+verify_env_file() {
+  if [ ! -f "$ENV_FILE" ]; then
+    echo "Error: .env file not found in $REPO_DIR."
+    exit 1
+  else
+    echo ".env file exists, using it for environment variables."
+  fi
+}
 
-# Create a virtual environment and install dependencies
-if [ ! -d "$REPO_DIR/venv" ]; then
-  echo "Creating virtual environment..."
-  python3 -m venv venv
-fi
+# Main process
+main() {
+  install_dependencies
+  deploy_repository
+  setup_python_env
+  verify_env_file  # Check if .env file exists
+}
 
-echo "Activating virtual environment and installing dependencies..."
-source venv/bin/activate
-pip install -r requirements.txt
-
-# Option to run as service or in the current terminal
-if [ "$DAEMON_MODE" = true ]; then
-  echo "Setting up to run as a systemd service..."
-
-  # Create systemd service file
-  SERVICE_FILE="/etc/systemd/system/telegrambot.service"
-  echo "Creating systemd service for Telegram Bot..."
-  cat << EOF > $SERVICE_FILE
-[Unit]
-Description=Telegram Bot Service
-After=network.target
-
-[Service]
-User=aida
-WorkingDirectory=$REPO_DIR
-ExecStart=$REPO_DIR/venv/bin/python $REPO_DIR/your_bot_script.py
-Environment="API_TOKEN=your_token"
-Environment="CLAUDE_API_ENDPOINT=your_endpoint"
-Environment="CLAUDE_API_KEY=your_key"
-Restart=always
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-  # Reload systemd and enable/start the service
-  echo "Reloading systemd daemon and starting Telegram Bot service..."
-  systemctl daemon-reload
-  systemctl enable telegrambot
-  systemctl start telegrambot
-
-  echo "Service is running as a daemon!"
-else
-  echo "Running Telegram Bot in the current terminal..."
-  $REPO_DIR/venv/bin/python $REPO_DIR/your_bot_script.py
-fi
+main "$@"
