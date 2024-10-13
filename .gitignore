@@ -1,0 +1,11 @@
+/*.pt
+/ci_cd/copy_script.ps1
+/.idea/
+/.venv/
+.DS_Store
+Thumbs.db
+__pycache__/
+*.py[cod]
+*.log
+.env
+*.env.local
