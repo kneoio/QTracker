@@ -1,0 +1,8 @@
+{
+  "start_message": "Por favor, envie uma foto do odômetro ou do medidor da bomba de combustível.",
+  "registration_prompt": "Você não está registrado. Vamos começar o processo de registro. Qual é o seu nome?",
+  "odometer_received": "Foto do odômetro recebida. Agora, envie uma foto do medidor da bomba de combustível.",
+  "pump_received": "Foto do medidor da bomba de combustível recebida. Agora, envie uma foto do odômetro.",
+  "image_not_identified": "A imagem não pôde ser identificada como um odômetro ou uma bomba. Tente novamente com uma imagem mais clara.",
+  "process_complete": "Processando ambas as fotos..."
+}
