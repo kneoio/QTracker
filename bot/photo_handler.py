@@ -2,10 +2,11 @@ import logging
 import requests
 from telegram import Update
 from telegram.ext import ContextTypes
-from services.user_service import fetch_owner_by_telegram_name, fetch_vehicle_by_owner_id
+from services.user_service import fetch_owner_by_telegram_name
 from bot.constants import REGISTER_NAME
+from services.vehicle_service import fetch_vehicle_by_owner_id
 from utils.llm import encode_image, send_to_claude
-from utils.localization import load_messages
+from utils.localization import load_translations
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,7 @@ def get_user_language(context):
 # Start command handler
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     language_code = get_user_language(context)
-    messages = load_messages(language_code)
+    messages = load_translations(language_code)
     logger.info(f"User {update.effective_user.id} started the bot.")
     await update.message.reply_text(messages['start_message'])
 
@@ -28,62 +29,51 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Handle text messages that are not commands
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     language_code = get_user_language(context)
-    messages = load_messages(language_code)
+    messages = load_translations(language_code)
     logger.info(f"Received a text message from user {update.effective_user.id}: {update.message.text}")
     await update.message.reply_text(messages['start_message'])
 
-
-# Photo handler
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     telegram_name = update.effective_user.username
     language_code = get_user_language(context)
-    messages = load_messages(language_code)
+    bot_messages = load_translations(language_code)
 
     logger.info(f"Received a photo from user {user_id}.")
 
-    # Check if the user exists by Telegram username
     owner = fetch_owner_by_telegram_name(telegram_name)
-    if not owner:
-        await update.message.reply_text(messages['registration_prompt'])
-        return REGISTER_NAME
+    await update.message.reply_text(bot_messages['hello'] + owner)
+#    vehicle_info = fetch_vehicle_by_owner_id(owner.id)
+#    if vehicle_info:
+#        brand = vehicle_info.get('brand')
+#        model = vehicle_info.get('model')
+#        vin = vehicle_info.get('vin')
+#        fuel_type = vehicle_info.get('fuel_type')
 
-    # Fetch the vehicle information for the existing user
-    vehicle_info = fetch_vehicle_by_owner_id(owner.id)
-    if vehicle_info:
-        brand = vehicle_info.get('brand')
-        model = vehicle_info.get('model')
-        vin = vehicle_info.get('vin')
-        fuel_type = vehicle_info.get('fuel_type')
+#        await update.message.reply_text(
+#            f"Welcome back, {owner.telegram_name}! Here is your vehicle information:\n"
+#            f"Brand: {brand}\nModel: {model}\nVIN: {vin}\nFuel Type: {fuel_type}"
+#        )
+#    else:
+#        await update.message.reply_text(bot_messages['vehicle_info_not_found'])
 
-        await update.message.reply_text(
-            f"Welcome back, {owner.telegram_name}! Here is your vehicle information:\n"
-            f"Brand: {brand}\nModel: {model}\nVIN: {vin}\nFuel Type: {fuel_type}"
-        )
-    else:
-        await update.message.reply_text(messages['vehicle_info_not_found'])
-
-    # Fetch and encode the photo from Telegram
     file_id = update.message.photo[-1].file_id
     file = await context.bot.get_file(file_id)
     photo_content = requests.get(file.file_path).content
     base64_image = encode_image(photo_content)
 
-    # Send the image to Claude to determine its type (odometer or pump)
-    image_type_prompt = messages['image_type_prompt']
+    image_type_prompt = bot_messages[
+        'image_type_prompt']
     image_type_result = await send_to_claude(base64_image, image_type_prompt)
 
     if image_type_result:
         image_type_text = image_type_result[0].get('text', '').strip().lower()
-
-        # Handle image type
         await handle_image_type(update, context, user_id, image_type_text, base64_image)
 
 
-# Handle image type logic
 async def handle_image_type(update, context, user_id, image_type_text, base64_image):
     language_code = get_user_language(context)
-    messages = load_messages(language_code)
+    messages = load_translations(language_code)
 
     if image_type_text == 'odometer':
         if 'odometer_image' in photos_data.get(user_id, {}):
@@ -98,8 +88,31 @@ async def handle_image_type(update, context, user_id, image_type_text, base64_im
         else:
             photos_data.setdefault(user_id, {})['fuel_meter_image'] = base64_image
             await update.message.reply_text(messages['pump_received'])
-    else:
-        await update.message.reply_text(messages['image_not_identified'])
+
+    # Step 2: If it's something else, check if it's a vehicle or logo
+    elif image_type_text == 'something else':
+        # Further check if it's a vehicle or vehicle logo
+        vehicle_check_prompt = messages['vehicle_check_prompt']  # "Check if this is a vehicle or logo."
+        vehicle_check_result = await send_to_claude(base64_image, vehicle_check_prompt)
+
+        if vehicle_check_result:
+            vehicle_check_text = vehicle_check_result[0].get('text', '').strip().lower()
+
+            if vehicle_check_text == 'vehicle':
+                # Ask user to register the vehicle
+                await update.message.reply_text(messages['vehicle_registration_prompt'])
+
+            elif vehicle_check_text == 'logo':
+                # Try to recognize the logo for registration
+                logo_recognition_prompt = messages[
+                    'logo_recognition_prompt']  # "Identify the vehicle manufacturer logo in this image."
+                logo_result = await send_to_claude(base64_image, logo_recognition_prompt)
+                logo_name = logo_result[0].get('text', '') if logo_result else messages['unknown_logo']
+                await update.message.reply_text(
+                    f"It looks like the logo of {logo_name}. Would you like to register a vehicle under this brand?")
+
+            else:
+                await update.message.reply_text(messages['image_not_identified'])
 
     # Process both images if received
     if 'odometer_image' in photos_data.get(user_id, {}) and 'fuel_meter_image' in photos_data.get(user_id, {}):
@@ -109,7 +122,7 @@ async def handle_image_type(update, context, user_id, image_type_text, base64_im
 # Process odometer and fuel pump images
 async def process_images(update, context, user_id):
     language_code = get_user_language(context)
-    messages = load_messages(language_code)
+    messages = load_translations(language_code)
 
     await update.message.reply_text(messages['process_complete'])
 

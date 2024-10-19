@@ -6,3 +6,4 @@ pytesseract
 pillow
 requests
 python-dotenv
+anthropic

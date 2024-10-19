@@ -1,0 +1,14 @@
+{
+    "name": "register_user",
+    "description": "Register a new user.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "telegramName": {
+                "type": "string",
+                "description": "User's telegram name"
+            }
+        },
+        "required": ["telegramName"]
+    }
+}
