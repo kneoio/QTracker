@@ -1,0 +1,14 @@
+{
+  "name": "read_odometer",
+  "description": "Extract the total odometer reading (not day trip) from an odometer image and provide a confidence score",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "image_data": {
+        "type": "string",
+        "description": "Base64 encoded image data"
+      }
+    },
+    "required": ["image_data"]
+  }
+}

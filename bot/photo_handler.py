@@ -3,8 +3,6 @@ import requests
 from telegram import Update
 from telegram.ext import ContextTypes
 from services.user_service import fetch_owner_by_telegram_name
-from bot.constants import REGISTER_NAME
-from services.vehicle_service import fetch_vehicle_by_owner_id
 from utils.llm import encode_image, send_to_claude
 from utils.localization import load_translations
 
@@ -12,21 +10,15 @@ logger = logging.getLogger(__name__)
 
 photos_data = {}
 
-
-# Load user's language or default to English
 def get_user_language(context):
     return context.user_data.get('language_code', 'en')
 
-
-# Start command handler
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     language_code = get_user_language(context)
     messages = load_translations(language_code)
     logger.info(f"User {update.effective_user.id} started the bot.")
     await update.message.reply_text(messages['start_message'])
 
-
-# Handle text messages that are not commands
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     language_code = get_user_language(context)
     messages = load_translations(language_code)
@@ -43,19 +35,6 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     owner = fetch_owner_by_telegram_name(telegram_name)
     await update.message.reply_text(bot_messages['hello'] + owner)
-#    vehicle_info = fetch_vehicle_by_owner_id(owner.id)
-#    if vehicle_info:
-#        brand = vehicle_info.get('brand')
-#        model = vehicle_info.get('model')
-#        vin = vehicle_info.get('vin')
-#        fuel_type = vehicle_info.get('fuel_type')
-
-#        await update.message.reply_text(
-#            f"Welcome back, {owner.telegram_name}! Here is your vehicle information:\n"
-#            f"Brand: {brand}\nModel: {model}\nVIN: {vin}\nFuel Type: {fuel_type}"
-#        )
-#    else:
-#        await update.message.reply_text(bot_messages['vehicle_info_not_found'])
 
     file_id = update.message.photo[-1].file_id
     file = await context.bot.get_file(file_id)
@@ -114,12 +93,9 @@ async def handle_image_type(update, context, user_id, image_type_text, base64_im
             else:
                 await update.message.reply_text(messages['image_not_identified'])
 
-    # Process both images if received
     if 'odometer_image' in photos_data.get(user_id, {}) and 'fuel_meter_image' in photos_data.get(user_id, {}):
         await process_images(update, context, user_id)
 
-
-# Process odometer and fuel pump images
 async def process_images(update, context, user_id):
     language_code = get_user_language(context)
     messages = load_translations(language_code)
@@ -132,7 +108,6 @@ async def process_images(update, context, user_id):
         "Please analyze this odometer image and provide the numeric value of kilometers or miles traveled based on the number displayed."
     )
 
-    # Analyze the fuel pump image and distinguish between cost and liters
     fuel_result = await send_to_claude(
         photos_data[user_id]["fuel_meter_image"],
         """

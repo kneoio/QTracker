@@ -1,0 +1,14 @@
+{
+  "name": "classify_image",
+  "description": "Classify an image as either 'odometer' or 'fuel pump' and provide a confidence score",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "image_data": {
+        "type": "string",
+        "description": "Base64 encoded image data"
+      }
+    },
+    "required": ["image_data"]
+  }
+}

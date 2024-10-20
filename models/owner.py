@@ -1,4 +1,3 @@
-import requests
 import logging
 
 logger = logging.getLogger(__name__)
@@ -16,7 +15,6 @@ class Owner:
 
     @classmethod
     def from_response(cls, data):
-        """Instantiate the Owner object from the API response."""
         owner = cls(data['telegramName'])
         owner.email = data.get('email')
         owner.whatsapp_name = data.get('whatsappName')
