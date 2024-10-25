@@ -2,7 +2,7 @@ import logging
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 from bot.constants import REGISTER_VEHICLE, REGISTER_YEAR
-from utils.localization import load_translations
+
 
 logger = logging.getLogger(__name__)
 

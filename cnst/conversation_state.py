@@ -1,0 +1,1 @@
+FIRST_PHOTO = 1

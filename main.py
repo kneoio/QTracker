@@ -1,18 +1,19 @@
-import json
-import os
 import logging
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ConversationHandler
+import os
 from dotenv import load_dotenv
-from bot.photo_handler import start, handle_text, handle_photo
-from bot.constants import REGISTER_NAME, REGISTER_VEHICLE, REGISTER_YEAR
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ConversationHandler
+from bot.command__handler import start
+from bot.photo_handler import handle_text, handle_photo
 from bot.registration import cancel
-from utils.localization import load_translations
+from cnst.conversation_state import FIRST_PHOTO
+
 
 load_dotenv()
 API_TOKEN = os.getenv('TELEGRAM_BOT_API_TOKEN')
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 async def set_language(update, context):
     if len(context.args) > 0:
@@ -22,18 +23,19 @@ async def set_language(update, context):
     else:
         await update.message.reply_text("Please provide a valid language code (e.g., 'en', 'pt').")
 
+
 if __name__ == '__main__':
     logger.info("Starting the bot...")
 
     app = ApplicationBuilder().token(API_TOKEN).build()
-    language_code = 'en'
-    bot_messages = load_translations(language_code)
     registration_conv_handler = ConversationHandler(
-        entry_points=[MessageHandler(filters.PHOTO, handle_photo)],
+        entry_points=[
+            CommandHandler('start', start),
+            MessageHandler(filters.PHOTO, handle_photo),
+         #   MessageHandler(filters.TEXT, handle_conversation_with_ai)  # Trigger on any text message
+        ],
         states={
-#            REGISTER_NAME: [MessageHandler(filters.TEXT & ~filters.COMMAND, register_name)],
-#            REGISTER_VEHICLE: [MessageHandler(filters.TEXT & ~filters.COMMAND, register_vehicle)],
-#            REGISTER_YEAR: [MessageHandler(filters.TEXT & ~filters.COMMAND, register_year)],
+            FIRST_PHOTO: [MessageHandler(filters.PHOTO, handle_photo)],
         },
         fallbacks=[CommandHandler('cancel', cancel)],
     )

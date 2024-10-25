@@ -1,6 +1,6 @@
 {
   "hello": "Hello",
-  "start_message": "Please send a photo of the odometer or the fuel pump meter.",
+  "send_odometer_and_pump_photo": "Please send a photo of the odometer and the fuel pump meter.",
   "registration_prompt": "You are not registered. Let's start the registration process. What is your name?",
   "odometer_received": "Odometer photo received. Now, please send a photo of the fuel pump meter.",
   "pump_received": "Fuel pump meter photo received. Now, please send a photo of the odometer.",
