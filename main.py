@@ -1,12 +1,13 @@
 import logging
 import os
 from dotenv import load_dotenv
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ConversationHandler
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ConversationHandler, \
+    CallbackContext
 from bot.command__handler import start
 from bot.photo_handler import handle_text, handle_photo
 from bot.registration import cancel
 from cnst.conversation_state import FIRST_PHOTO
-
 
 load_dotenv()
 API_TOKEN = os.getenv('TELEGRAM_BOT_API_TOKEN')
@@ -24,15 +25,21 @@ async def set_language(update, context):
         await update.message.reply_text("Please provide a valid language code (e.g., 'en', 'pt').")
 
 
+async def error_handler(update: object, context: CallbackContext) -> None:
+    logger.error("Exception while handling an update:", exc_info=context.error)
+    if isinstance(update, Update) and update.message:
+        await update.message.reply_text("An error occurred. Please try again.")
+
+
 if __name__ == '__main__':
     logger.info("Starting the bot...")
 
     app = ApplicationBuilder().token(API_TOKEN).build()
+    app.add_error_handler(error_handler)
     registration_conv_handler = ConversationHandler(
         entry_points=[
             CommandHandler('start', start),
             MessageHandler(filters.PHOTO, handle_photo),
-         #   MessageHandler(filters.TEXT, handle_conversation_with_ai)  # Trigger on any text message
         ],
         states={
             FIRST_PHOTO: [MessageHandler(filters.PHOTO, handle_photo)],

@@ -1,8 +1,19 @@
 {
-  "send_odometer_and_pump_photo": "Por favor, envie uma foto do odômetro e do medidor da bomba de combustível.",
-  "registration_prompt": "Você não está registrado. Vamos começar o processo de registro. Qual é o seu nome?",
-  "odometer_received": "Foto do odômetro recebida. Agora, envie uma foto do medidor da bomba de combustível.",
-  "pump_received": "Foto do medidor da bomba de combustível recebida. Agora, envie uma foto do odômetro.",
-  "image_not_identified": "A imagem não pôde ser identificada como um odômetro ou uma bomba. Tente novamente com uma imagem mais clara.",
-  "process_complete": "Processando ambas as fotos..."
+  "hello": "Olá",
+  "send_odometer_and_pump_photo": "Por favor, envie uma foto do odómetro e do medidor da bomba de combustível.",
+  "registration_prompt": "Não está registado. Vamos iniciar o processo de registo. Qual é o seu nome?",
+  "odometer_received": "Foto do odómetro recebida. Agora, por favor envie uma foto do medidor da bomba de combustível.",
+  "pump_received": "Foto do medidor da bomba de combustível recebida. Agora, por favor envie uma foto do odómetro.",
+  "image_not_identified": "A imagem não pôde ser identificada como um odómetro ou uma bomba. Tente novamente com uma imagem mais clara.",
+  "process_complete": "Ambas as fotos processadas",
+  "photo_processing": "As fotos estão a ser processadas...",
+  "process_failed": "O processamento das fotos falhou",
+  "first_photo_received": "A primeira foto recebida",
+  "please_send_second_photo": "Por favor envie a segunda foto",
+  "second_photo_received": "A segunda foto recebida",
+  "ask_vehicle_model": "Qual é o modelo do veículo?",
+  "ask_vehicle_year": "Qual é o ano do veículo?",
+  "registration_success": "Registo concluído com sucesso",
+  "registration_failed": "Falha no registo",
+  "registration_canceled": "Registo cancelado"
 }

@@ -1,7 +1,7 @@
 from typing import List, Dict
 from dataclasses import dataclass, field
 
-from models import ImageInfo
+from models.ImageInfo import ImageInfo
 
 
 @dataclass
@@ -13,7 +13,8 @@ class VehicleData:
     addInfo: Dict[str, str] = field(default_factory=dict)
     images: List[ImageInfo] = field(default_factory=list)
 
-    def add_image(self, image_data: str, image_type: str, confidence: float, description: str, add_info: Dict[str, str]):
+    def add_image(self, image_data: str, image_type: str, confidence: float, add_info: Dict[str, str],
+                  description: str):
         image_info = ImageInfo(
             imageData=image_data,
             type=image_type,

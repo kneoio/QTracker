@@ -16,7 +16,7 @@ APP_NAME = os.getenv('APP_NAME')
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 USER_CHECK_ENDPOINT = f"{API_BASE_URL}/api/{APP_NAME}/owners/telegram"
 USER_REGISTRATION_ENDPOINT = f"{API_BASE_URL}/api/{APP_NAME}/owners/telegram/"
-USER_VEHICLE_ENDPOINT = f"{API_BASE_URL}/api/{APP_NAME}/users/{{user_id}}/vehicles"  # Use 'vehicles' instead of 'vehicle'
+USER_VEHICLE_ENDPOINT = f"{API_BASE_URL}/api/{APP_NAME}/users/{{user_id}}/vehicles"
 tools = []
 
 def load_tool_definitions(directory):
