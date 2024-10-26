@@ -1,0 +1,18 @@
+{
+  "hello": "Ciao",
+  "send_odometer_and_pump_photo": "Per favore, invia una foto del contachilometri e del contatore della pompa di carburante.",
+  "registration_prompt": "Non sei registrato. Iniziamo il processo di registrazione. Come ti chiami?",
+  "odometer_received": "Foto del contachilometri ricevuta. Ora, per favore, invia una foto del contatore della pompa di carburante.",
+  "pump_received": "Foto del contatore della pompa ricevuta. Ora, per favore, invia una foto del contachilometri.",
+  "image_not_identified": "Non è stato possibile identificare l'immagine come contachilometri o pompa. Per favore, riprova con un'immagine più chiara.",
+  "photo_processing": "Le foto sono in elaborazione...",
+  "process_failed": "L'elaborazione delle foto non è riuscita",
+  "first_photo_received": "Prima foto ricevuta",
+  "please_send_second_photo": "Per favore, invia la seconda foto",
+  "not_enough_data": "Questo è il primo inserimento dati. Per calcolare le metriche, abbiamo bisogno di almeno due registrazioni",
+  "ask_vehicle_model": "Qual è il modello del tuo veicolo?",
+  "ask_vehicle_year": "Di che anno è il tuo veicolo?",
+  "registration_success": "Registrazione completata con successo! Tutto è pronto.",
+  "registration_failed": "Registrazione fallita. Per favore, riprova.",
+  "registration_canceled": "Registrazione annullata."
+}

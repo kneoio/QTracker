@@ -1,0 +1,18 @@
+{
+  "hello": "Bonjour",
+  "send_odometer_and_pump_photo": "Veuillez envoyer une photo du compteur kilométrique et du compteur de la pompe à essence.",
+  "registration_prompt": "Vous n'êtes pas inscrit. Commençons le processus d'inscription. Quel est votre nom ?",
+  "odometer_received": "Photo du compteur kilométrique reçue. Maintenant, veuillez envoyer une photo du compteur de la pompe.",
+  "pump_received": "Photo du compteur de la pompe reçue. Maintenant, veuillez envoyer une photo du compteur kilométrique.",
+  "image_not_identified": "L'image n'a pas pu être identifiée comme compteur ou pompe. Veuillez réessayer avec une image plus nette.",
+  "photo_processing": "Les photos sont en cours de traitement...",
+  "process_failed": "Le traitement des photos a échoué",
+  "first_photo_received": "Première photo reçue",
+  "please_send_second_photo": "Veuillez envoyer la deuxième photo",
+  "not_enough_data": "Ceci est la première entrée de données. Pour calculer les métriques, nous avons besoin d'au moins deux enregistrements",
+  "ask_vehicle_model": "Quel est le modèle de votre véhicule ?",
+  "ask_vehicle_year": "De quelle année est votre véhicule ?",
+  "registration_success": "Inscription réussie ! Tout est prêt.",
+  "registration_failed": "L'inscription a échoué. Veuillez réessayer.",
+  "registration_canceled": "Inscription annulée."
+}

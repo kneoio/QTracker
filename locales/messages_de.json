@@ -1,0 +1,18 @@
+{
+  "hello": "Hallo",
+  "send_odometer_and_pump_photo": "Bitte senden Sie ein Foto des Kilometerzählers und der Tankstellenzapfsäule.",
+  "registration_prompt": "Sie sind nicht registriert. Lassen Sie uns mit der Registrierung beginnen. Wie heißen Sie?",
+  "odometer_received": "Foto des Kilometerzählers erhalten. Bitte senden Sie jetzt ein Foto der Tankstellenzapfsäule.",
+  "pump_received": "Foto der Tankstellenzapfsäule erhalten. Bitte senden Sie jetzt ein Foto des Kilometerzählers.",
+  "image_not_identified": "Das Bild konnte nicht als Kilometerzähler oder Zapfsäule identifiziert werden. Bitte versuchen Sie es mit einem deutlicheren Bild.",
+  "photo_processing": "Die Fotos werden verarbeitet...",
+  "process_failed": "Die Fotoverarbeitung ist fehlgeschlagen",
+  "first_photo_received": "Erstes Foto erhalten",
+  "please_send_second_photo": "Bitte senden Sie das zweite Foto",
+  "not_enough_data": "Dies ist der erste Dateneintrag. Für die Berechnung der Kennzahlen benötigen wir mindestens zwei Einträge",
+  "ask_vehicle_model": "Welches Fahrzeugmodell haben Sie?",
+  "ask_vehicle_year": "Aus welchem Jahr ist Ihr Fahrzeug?",
+  "registration_success": "Registrierung erfolgreich abgeschlossen! Alles ist fertig.",
+  "registration_failed": "Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+  "registration_canceled": "Registrierung abgebrochen."
+}

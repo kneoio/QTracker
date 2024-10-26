@@ -15,7 +15,7 @@ class VehicleDataAPIClient:
             raise ValueError("Required environment variables are not set.")
 
     def send_data(self, payload):
-        url = f"{self.api_base_url}/api/{self.app_name}/consumings/"
+        url = f"{self.api_base_url}/api/{self.app_name}/consumings/add/"
         headers = {
             'Authorization': f'Bearer {self.jwt_token}',
             'Content-Type': 'application/json'

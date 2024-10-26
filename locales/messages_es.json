@@ -1,0 +1,18 @@
+{
+  "hello": "Hola",
+  "send_odometer_and_pump_photo": "Por favor, envíe una foto del cuentakilómetros y del contador del surtidor de combustible.",
+  "registration_prompt": "No está registrado. Vamos a comenzar el proceso de registro. ¿Cuál es su nombre?",
+  "odometer_received": "Foto del cuentakilómetros recibida. Ahora, por favor envíe una foto del contador del surtidor.",
+  "pump_received": "Foto del contador del surtidor recibida. Ahora, por favor envíe una foto del cuentakilómetros.",
+  "image_not_identified": "No se pudo identificar la imagen como cuentakilómetros o surtidor. Por favor, intente de nuevo con una imagen más clara.",
+  "photo_processing": "Las fotos se están procesando...",
+  "process_failed": "El procesamiento de las fotos ha fallado",
+  "first_photo_received": "Primera foto recibida",
+  "please_send_second_photo": "Por favor, envíe la segunda foto",
+  "not_enough_data": "Este es el primer registro de datos. Para calcular las métricas, necesitamos al menos dos registros",
+  "ask_vehicle_model": "¿Cuál es el modelo de su vehículo?",
+  "ask_vehicle_year": "¿De qué año es su vehículo?",
+  "registration_success": "¡Registro completado con éxito! Todo está listo.",
+  "registration_failed": "El registro ha fallado. Por favor, inténtelo de nuevo.",
+  "registration_canceled": "Registro cancelado."
+}

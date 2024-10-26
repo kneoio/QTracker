@@ -5,15 +5,14 @@
   "odometer_received": "Odometer photo received. Now, please send a photo of the fuel pump meter.",
   "pump_received": "Fuel pump meter photo received. Now, please send a photo of the odometer.",
   "image_not_identified": "The image could not be identified as an odometer or a pump. Please try again with a clearer image.",
-  "process_complete": "Both photos processed",
-  "photo_processing": "The photos processing ...",
-  "process_failed": "The photos process was failed",
+  "photo_processing": "The photos are processing...",
+  "process_failed": "The photo processing has failed",
   "first_photo_received": "The first picture received",
   "please_send_second_photo": "Please send second photo",
-  "second_photo_received": "The second picture received",
-  "ask_vehicle_model": "ask_vehicle_model...",
-  "ask_vehicle_year": "ask_vehicle_year...",
-  "registration_success": "registration_success",
-  "registration_failed": "registration_failed",
-  "registration_canceled": "registration_canceled"
+  "not_enough_data": "This is the first data entry. To calculate metrics, we need at least two records",
+  "ask_vehicle_model": "What is your vehicle model?",
+  "ask_vehicle_year": "What year is your vehicle?",
+  "registration_success": "Registration successful! You're all set.",
+  "registration_failed": "Registration failed. Please try again.",
+  "registration_canceled": "Registration has been canceled."
 }
