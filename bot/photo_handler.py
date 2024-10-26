@@ -127,7 +127,6 @@ async def process_images(update, context, user_id):
             formatted_response = f"Response Text: {response.text}"
 
         await update.message.reply_text(formatted_response)
-        await update.message.reply_text(translations.get_translation('process_complete', language_code))
     else:
         print(response)
         await update.message.reply_text(translations.get_translation('process_failed', language_code))

@@ -58,9 +58,25 @@ class ClaudeClient:
                 {
                     "role": "user",
                     "content": [
-                        {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": image_data}},
-                        {"type": "text",
-                         "text": "Please read the odometer value from this image and respond only with a JSON object like {\"total_km\": <value>, \"confidence\": <value>}."}
+                        {
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": "image/jpeg",
+                                "data": image_data
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "text": (
+                                "Please read the odometer value from this image. Respond only with a JSON object like "
+                                "{\"total_km\": <value>, \"confidence\": <value>}."
+                                " Note that odometer readings are typically whole numbers, not decimal values. "
+                                "Avoid outputs like 130.16; the correct reading should be 13060. Decimal values are rare, "
+                                "and any fractional number generally has distinct visual indicators such as different colors, "
+                                "spaces, or a visible dot. If uncertain, default to whole numbers."
+                            )
+                        }
                     ]
                 }
             ]
