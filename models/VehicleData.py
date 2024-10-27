@@ -2,6 +2,7 @@ from typing import List, Dict
 from dataclasses import dataclass, field
 
 from models.ImageInfo import ImageInfo
+from utils.image_helper import resize_image_data
 
 
 @dataclass
@@ -13,17 +14,10 @@ class VehicleData:
     addInfo: Dict[str, str] = field(default_factory=dict)
     images: List[ImageInfo] = field(default_factory=list)
 
-    def add_image(self, image_data: str, image_type: str, confidence: float, add_info: Dict[str, str],
-                  description: str):
-        image_info = ImageInfo(
-            imageData=image_data,
-            type=image_type,
-            confidence=confidence,
-            numOfSeq=1,
-            addInfo=add_info,
-            description=description
-        )
-        self.images.append(image_info)
+    def add_image(self, image_data: ImageInfo, resize_image: bool = False, max_width: int = 800):
+        if resize_image:
+            image_data.imageData = resize_image_data(image_data.imageData, max_width)
+        self.images.append(image_data)
 
     def to_dict(self):
         return {
