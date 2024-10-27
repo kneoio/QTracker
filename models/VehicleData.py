@@ -19,6 +19,7 @@ class VehicleData:
             imageData=image_data,
             type=image_type,
             confidence=confidence,
+            numOfSeq=1,
             addInfo=add_info,
             description=description
         )
