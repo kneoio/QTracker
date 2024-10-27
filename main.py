@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ConversationHandler, \
     CallbackContext
-from bot.command__handler import start
+from bot.command__handler import start, list_events
 from bot.photo_handler import handle_text, handle_photo
 from bot.registration import cancel
 from cnst.conversation_state import FIRST_PHOTO
@@ -36,6 +36,7 @@ if __name__ == '__main__':
 
     app = ApplicationBuilder().token(API_TOKEN).build()
     app.add_error_handler(error_handler)
+    app.add_handler(CommandHandler('events', list_events))
     registration_conv_handler = ConversationHandler(
         entry_points=[
             CommandHandler('start', start),

@@ -49,7 +49,8 @@ async def handle_photo(update, context):
         first_image_entity = ImageInfo(
             imageData=base64_image,
             type=json.loads(response).get("classification"),
-            confidence=json.loads(response).get("confidence", 0.0)
+            confidence=json.loads(response).get("confidence", 0.0),
+            numOfSeq=1
         )
         context.user_data[first_image_entity.type] = first_image_entity
         await update.message.reply_text(translations.get_translation('please_send_second_photo', language_code))
@@ -66,7 +67,8 @@ async def handle_photo(update, context):
         first_image_entity = ImageInfo(
             imageData=base64_image,
             type=json.loads(response).get("classification"),
-            confidence=json.loads(response).get("confidence", 0.0)
+            confidence=json.loads(response).get("confidence", 0.0),
+            numOfSeq=2
         )
         context.user_data[first_image_entity.type] = first_image_entity
         await process_images(update, context, user_name)

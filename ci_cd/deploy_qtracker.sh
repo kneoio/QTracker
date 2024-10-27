@@ -1,19 +1,18 @@
 #!/bin/bash
 
-# Ensure script is run as root
 if [ "$EUID" -ne 0 ]; then
   echo "Please run as root"
   exit 1
 fi
 
 # Variables
-REPO_URL="https://github.com/kneoio/QTracker.git"  # Public GitHub repo URL
+REPO_URL="https://github.com/kneoio/QTracker.git"
 REPO_DIR="/home/qtracker/QTracker"
-ENV_FILE="/home/qtracker/.env"  # Update to match the location of your .env file
+ENV_FILE="/home/qtracker/.env"
 PYTHON_VERSION="python3.11"
 DAEMON_MODE=false
 
-# Parse command line options
+
 while getopts "d" opt; do
   case $opt in
     d)
@@ -26,7 +25,6 @@ while getopts "d" opt; do
   esac
 done
 
-# Function to check and install missing dependencies
 install_dependencies() {
   echo "Installing core utilities and Python..."
   apt update && apt install -y $PYTHON_VERSION $PYTHON_VERSION-venv git || {
@@ -35,9 +33,7 @@ install_dependencies() {
   }
 }
 
-# Clone or pull the latest code from the repository
 deploy_repository() {
-  # Check if the repository directory exists
   if [ -d "$REPO_DIR/.git" ]; then
     echo "QTracker repository found. Pulling latest changes..."
     cd "$REPO_DIR" || exit
@@ -55,7 +51,6 @@ deploy_repository() {
   fi
 }
 
-# Create virtual environment and install dependencies
 setup_python_env() {
   echo "Setting up Python virtual environment..."
   if [ ! -d "$REPO_DIR/venv" ]; then
@@ -75,7 +70,6 @@ setup_python_env() {
   deactivate
 }
 
-# Verify .env file exists (no creation, just check)
 verify_env_file() {
   if [ ! -f "$ENV_FILE" ]; then
     echo "Error: .env file not found at $ENV_FILE."
@@ -85,7 +79,6 @@ verify_env_file() {
   fi
 }
 
-# Function to create and run the service as a daemon using systemd
 run_as_daemon() {
   SERVICE_FILE="/etc/systemd/system/qtracker.service"
 
@@ -107,7 +100,6 @@ RestartSec=10
 WantedBy=multi-user.target
 EOF
 
-  # Reload systemd and enable/start the service
   echo "Reloading systemd daemon and starting QTracker service..."
   systemctl daemon-reload
   systemctl enable qtracker
@@ -116,7 +108,6 @@ EOF
   echo "QTracker is running as a systemd service!"
 }
 
-# Main process
 main() {
   install_dependencies
   deploy_repository

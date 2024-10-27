@@ -6,5 +6,6 @@ class ImageInfo:
     imageData: str
     type: str
     confidence: float
+    numOfSeq: int
     addInfo: Dict[str, Any] = field(default_factory=dict)
     description: str = ""

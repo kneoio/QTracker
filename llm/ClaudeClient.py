@@ -107,7 +107,9 @@ class ClaudeClient:
                     "content": [
                         {"type": "image", "source": {"type": "base64", "media_type": "image/jpeg", "data": image_data}},
                         {"type": "text",
-                         "text": "Please read the fuel volume, cost, and currency from this fuel pump image and respond only with a JSON object like {\"volume\": <value>, \"cost\": <value>, \"currency\": \"<currency>\", \"confidence\": <value>}."}
+                         "text": "Please read the fuel volume, cost, and currency from this fuel pump image and respond"
+                                 " only with a JSON object like "
+                                 "{\"volume\": <value>, \"cost\": <value>, \"currency\": \"<currency>\", \"confidence\": <value>}."}
                     ]
                 }
             ]
